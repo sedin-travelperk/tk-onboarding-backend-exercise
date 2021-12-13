@@ -20,7 +20,7 @@ class RecipeApiTests(TestCase):
 
     def setUp(self) -> None:
         self.client = APIClient()
-        self.recipe = DataGenerator.create_and_return_recipe_object()
+        self.recipe = DataGenerator.create_and_return_recipe()
 
     def test_retrieve_recipe_list(self):
         """Retrieve recipe list from db successful"""
@@ -28,6 +28,11 @@ class RecipeApiTests(TestCase):
         response = self.client.get(RECIPE_URL)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response_data_json = json.loads(response.data[0])
+
+        self.assertEqual(response_data_json['name'], self.recipe.name)
+        self.assertEqual(response_data_json['description'], self.recipe.description)
 
     def test_create_recipe(self):
         """Creating recipe in db successful"""
@@ -67,5 +72,3 @@ class RecipeApiTests(TestCase):
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-

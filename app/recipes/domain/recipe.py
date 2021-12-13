@@ -4,10 +4,14 @@ import json
 
 class Recipe:
 
-    def __init__(self, name, description, recipe_id=None,):
+    def __init__(self, name, description, recipe_id=None, ingredients=None):
+        if ingredients is None:
+            ingredients = []
+
         self.recipe_id = recipe_id
         self.name = name
         self.description = description
+        self.ingredients = ingredients
 
     def update(self, **kwargs):
         name = kwargs.get('name', None)
