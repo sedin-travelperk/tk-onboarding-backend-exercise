@@ -28,7 +28,7 @@ class RecipesView(APIView):
     def post(self, request, format=None):
         service = RecipeServiceImpl(repository=RecipeRepositoryImpl(), ingredient_repository=IngredientRepositoryImpl())
 
-        result = service.create(request.data.dict())
+        result = service.create(request.data)
 
         return Response(result.to_json(), status=status.HTTP_200_OK)
 

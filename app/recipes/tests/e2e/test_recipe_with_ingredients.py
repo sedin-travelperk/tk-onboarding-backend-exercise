@@ -40,17 +40,17 @@ class RecipeWithIngredientsAPITest(TestCase):
         payload = {
             'name': 'Test',
             'description': 'Test description',
-            'ingredients': json.dumps([
+            'ingredients': [
                 {
                     'name': 'Ingredient one',
                 },
                 {
                     'name': 'Ingredient two',
                 }
-            ])
+            ]
         }
 
-        response = self.client.post(RECIPE_URL, payload)
+        response = self.client.post(RECIPE_URL, payload, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

@@ -32,18 +32,18 @@ class RecipeServiceImpl(RecipeService):
         return recipes
 
     def create(self, data: dict) -> Recipe:
-        ingredients = data.pop('ingredients', [])
-
-        recipe = Recipe(**data)
+        recipe = Recipe(
+            name=data['name'],
+            description=data['description']
+        )
 
         new_recipe = self.recipe_repository.create(recipe=recipe)
 
-        for ingredient in ingredients:
-            print(type(ingredient), ingredient)
-            # new_ingredient = Ingredient(
-            #     name=ingredient['name']
-            # )
-            # new_recipe.ingredients.append(self.ingredient_repository.create(new_ingredient, new_recipe.recipe_id))
+        for ingredient in data.get('ingredients', []):
+            new_ingredient = Ingredient(
+                name=ingredient['name']
+            )
+            new_recipe.ingredients.append(self.ingredient_repository.create(new_ingredient, new_recipe.recipe_id))
 
         return new_recipe
 
