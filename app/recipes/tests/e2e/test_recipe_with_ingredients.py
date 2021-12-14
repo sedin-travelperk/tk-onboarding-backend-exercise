@@ -1,41 +1,11 @@
-import json
-
-from django.urls import reverse
-from django.test import TestCase
-
 from rest_framework import status
-from rest_framework.test import APIClient
 
+from recipes.tests.e2e.recipe_test_case import RecipeTestCase, API_CLIENT_JSON_FORMAT
 from recipes.tests.utils_test_data import UtilsTestData
 
-RECIPE_URL = reverse('recipes')
 
-API_CLIENT_JSON_FORMAT = 'json'
-
-
-def recipe_detail_url(recipe_id: int) -> str:
-    return reverse('recipes',  args=[recipe_id])
-
-
-class RecipeWithIngredientsAPITest(TestCase):
+class RecipeWithIngredientsAPITest(RecipeTestCase):
     """Test recipe with ingredients API"""
-
-    def setUp(self) -> None:
-        self.client = APIClient()
-        self.recipe = UtilsTestData.create_and_return_recipe_with_ingredients()
-
-    def test_retrieve_recipe_list(self):
-        """Retrieve recipe with ingredients list from db successful"""
-
-        response = self.client.get(RECIPE_URL)
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        response_data_json = json.loads(response.data[0])
-
-        self.assertEqual(response_data_json['name'], self.recipe.name)
-        self.assertEqual(response_data_json['description'], self.recipe.description)
-        self.assertEqual(len(response_data_json['ingredients']), 2)
 
     def test_create_recipe_with_ingredients(self):
         """Create recipe with ingredients in db successful"""
@@ -52,11 +22,15 @@ class RecipeWithIngredientsAPITest(TestCase):
             ]
         }
 
-        response = self.client.post(RECIPE_URL, payload, format=API_CLIENT_JSON_FORMAT)
+        response = self.client.post(
+            path=self.get_recipe_url(),
+            data=payload,
+            format=API_CLIENT_JSON_FORMAT
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response_data_json = json.loads(response.data)
+        response_data_json = self.get_json(response.data)
 
         self.assertEqual(response_data_json['name'], payload['name'])
         self.assertEqual(response_data_json['description'], payload['description'])
@@ -73,14 +47,17 @@ class RecipeWithIngredientsAPITest(TestCase):
             'description': 'New description'
         }
 
-        url = recipe_detail_url(recipe_id=self.recipe.id)
-        response = self.client.patch(url, payload, format=API_CLIENT_JSON_FORMAT)
+        response = self.client.patch(
+            path=self.get_recipe_detail_url(recipe_id=self.recipe_with_ingredients.id),
+            data=payload,
+            format=API_CLIENT_JSON_FORMAT
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response_data_json = json.loads(response.data)
+        response_data_json = self.get_json(response.data)
 
-        self.assertEqual(response_data_json['name'], self.recipe.name)
+        self.assertEqual(response_data_json['name'], self.recipe_with_ingredients.name)
         self.assertEqual(response_data_json['description'], payload['description'])
         self.assertEqual(len(response_data_json['ingredients']), 2)
         
@@ -93,16 +70,19 @@ class RecipeWithIngredientsAPITest(TestCase):
                 }
             ]
         }
-        
-        url = recipe_detail_url(recipe_id=self.recipe.id)
-        response = self.client.patch(url, payload, format=API_CLIENT_JSON_FORMAT)
+
+        response = self.client.patch(
+            path=self.get_recipe_detail_url(recipe_id=self.recipe_with_ingredients.id),
+            data=payload,
+            format=API_CLIENT_JSON_FORMAT
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response_data_json = json.loads(response.data)
+        response_data_json = self.get_json(response.data)
 
-        self.assertEqual(response_data_json['name'], self.recipe.name)
-        self.assertEqual(response_data_json['description'], self.recipe.description)
+        self.assertEqual(response_data_json['name'], self.recipe_with_ingredients.name)
+        self.assertEqual(response_data_json['description'], self.recipe_with_ingredients.description)
 
         responser_data_ingredients = response_data_json['ingredients']
         self.assertEqual(len(responser_data_ingredients), 1)
@@ -110,11 +90,12 @@ class RecipeWithIngredientsAPITest(TestCase):
 
     def test_delete_recipe_with_ingredients(self):
         """Deleting recipe with ingredients in db successful"""
-        url = recipe_detail_url(recipe_id=self.recipe.id)
-        response = self.client.delete(url)
+        response = self.client.delete(
+            path=self.get_recipe_detail_url(recipe_id=self.recipe_with_ingredients.id)
+        )
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-        ingredients_in_db = UtilsTestData.get_ingredients_from_db(recipe_id=self.recipe.id)
+        ingredients_in_db = UtilsTestData.get_ingredients_from_db(recipe_id=self.recipe_with_ingredients.id)
 
         self.assertEqual(len(ingredients_in_db), 0)
