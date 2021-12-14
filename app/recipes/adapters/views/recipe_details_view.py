@@ -22,7 +22,7 @@ class RecipeDetailView(APIView):
     def get(self, request, pk, format=None):
         result = self.recipe_service.get(recipe_id=pk)
 
-        return Response(result, status=status.HTTP_200_OK)
+        return Response(result.to_json(), status=status.HTTP_200_OK)
 
     def patch(self, request, pk, format=None):
         result = self.recipe_service.update(

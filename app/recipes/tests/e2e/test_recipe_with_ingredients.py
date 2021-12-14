@@ -7,6 +7,20 @@ from recipes.tests.utils_test_data import UtilsTestData
 class RecipeWithIngredientsAPITest(RecipeTestCase):
     """Test recipe with ingredients API"""
 
+    def test_retrieve_recipe_with_ingredients(self):
+        """Retrieve recipe with ingredients from db"""
+        response = self.client.get(
+            path=self.get_recipe_detail_url(recipe_id=self.recipe_with_ingredients.id)
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response_data_json = self.get_json(response.data)
+
+        self.assertEqual(response_data_json['name'], self.recipe_with_ingredients.name)
+        self.assertEqual(response_data_json['description'], self.recipe_with_ingredients.description)
+        self.assertEqual(len(response_data_json['ingredients']), 2)
+
     def test_create_recipe_with_ingredients(self):
         """Create recipe with ingredients in db successful"""
         payload = {
