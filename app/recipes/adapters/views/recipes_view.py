@@ -20,7 +20,11 @@ class RecipesView(APIView):
         )
 
     def get(self, request, format=None):
-        recipes = self.recipe_service.find_all()
+        name = request.query_params.get('name')
+        if name:
+            recipes = []
+        else:
+            recipes = self.recipe_service.find_all()
 
         result = [recipe.to_json() for recipe in recipes]
 

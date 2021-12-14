@@ -3,6 +3,7 @@ from rest_framework import status
 from recipes.tests.e2e.recipe_test_case import RecipeTestCase, API_CLIENT_JSON_FORMAT
 
 RECIPE_ID_NOT_PRESENT_IN_DB = 3124
+NAME_NOT_IN_DB = 'hdsfjash'
 
 
 class RecipeApiTests(RecipeTestCase):
@@ -107,3 +108,50 @@ class RecipeApiTests(RecipeTestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_find_recipes_by_name_not_created(self):
+        """Retrieve recipes from db by name that is not present in db"""
+        querystring = {
+            'name': NAME_NOT_IN_DB
+        }
+
+        response = self.client.get(
+            path=self.get_recipe_url(),
+            data=querystring
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
+    def test_find_recipes_by_name(self):
+        """Retrieve all recipes from db with given name"""
+        querystring = {
+            'name': self.recipe.name
+        }
+
+        response = self.client.get(
+            path=self.get_recipe_url(),
+            data=querystring
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+        response_data_json = self.get_json(response.data[0])
+
+        self.assertEqual(response_data_json[0]['name'], self.recipe.name)
+        self.assertEqual(response_data_json[0]['name'], self.recipe.description)
+
+    def test_find_recipes_by_name_substring(self):
+        """Retrieve all recipes from db with given name substring"""
+        querystring = {
+            'name': self.recipe.name[:2]
+        }
+
+        response = self.client.get(
+            path=self.get_recipe_url(),
+            data=querystring
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(response.data) >= 1)
