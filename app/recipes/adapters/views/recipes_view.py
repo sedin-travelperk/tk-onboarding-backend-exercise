@@ -22,7 +22,9 @@ class RecipesView(APIView):
     def get(self, request, format=None):
         name = request.query_params.get('name')
         if name:
-            recipes = []
+            recipes = self.recipe_service.find_by_name(
+                name=name
+            )
         else:
             recipes = self.recipe_service.find_all()
 

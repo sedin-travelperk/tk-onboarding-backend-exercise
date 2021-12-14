@@ -16,6 +16,10 @@ class RecipeRepository(abc.ABC):
         raise NotImplemented
 
     @abc.abstractmethod
+    def find_by_name(self, name: str) -> List[Recipe]:
+        raise NotImplemented
+
+    @abc.abstractmethod
     def create(self, recipe: Recipe) -> Recipe:
         raise NotImplemented
 

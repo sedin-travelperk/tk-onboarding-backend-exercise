@@ -23,6 +23,11 @@ class RecipeRepositoryImpl(RecipeRepository):
 
         return [recipe.to_domain_model() for recipe in recipes]
 
+    def find_by_name(self, name: str) -> List[Recipe]:
+        recipes = RecipeORM.objects.filter(name__startswith=name)
+
+        return [recipe.to_domain_model() for recipe in recipes]
+
     def create(self, recipe: Recipe) -> Recipe:
         recipe_orm = RecipeORM.create_from_domain_model(
             name=recipe.name,

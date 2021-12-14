@@ -139,8 +139,8 @@ class RecipeApiTests(RecipeTestCase):
 
         response_data_json = self.get_json(response.data[0])
 
-        self.assertEqual(response_data_json[0]['name'], self.recipe.name)
-        self.assertEqual(response_data_json[0]['name'], self.recipe.description)
+        self.assertEqual(response_data_json['name'], self.recipe.name)
+        self.assertEqual(response_data_json['description'], self.recipe.description)
 
     def test_find_recipes_by_name_substring(self):
         """Retrieve all recipes from db with given name substring"""

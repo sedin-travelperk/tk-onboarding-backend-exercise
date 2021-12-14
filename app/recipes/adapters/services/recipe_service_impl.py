@@ -33,6 +33,14 @@ class RecipeServiceImpl(RecipeService):
 
         return recipes
 
+    def find_by_name(self, name: str) -> List[Recipe]:
+        recipes = self.recipe_repository.find_by_name(name=name)
+
+        for recipe in recipes:
+            recipe.ingredients = self.ingredient_repository.find_by_recipe_id(recipe_id=recipe.recipe_id)
+
+        return recipes
+
     def create(self, data: dict) -> Recipe:
         recipe = Recipe(
             name=data['name'],
