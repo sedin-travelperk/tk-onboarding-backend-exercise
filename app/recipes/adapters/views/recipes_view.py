@@ -4,7 +4,7 @@ from rest_framework import status
 
 from recipes.adapters.repository.ingredient_repository_impl import IngredientRepositoryImpl
 from recipes.adapters.repository.recipe_repository_impy import RecipeRepositoryImpl
-from recipes.domain.use_case.recipe_service_impl import RecipeServiceImpl
+from recipes.adapters.services.recipe_service_impl import RecipeServiceImpl
 
 
 class RecipesView(APIView):
