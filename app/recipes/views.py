@@ -48,14 +48,9 @@ class RecipeDetailView(APIView):
     def patch(self, request, pk, format=None):
         service = RecipeServiceImpl(repository=RecipeRepositoryImpl(), ingredient_repository=IngredientRepositoryImpl())
 
-        data = {
-            'name': request.data.get('name', None),
-            'description': request.data.get('description', None)
-        }
-
         result = service.update(
             recipe_id=pk,
-            data=data
+            data=request.data
         )
 
         return Response(result.to_json(), status=status.HTTP_200_OK)

@@ -10,6 +10,8 @@ from recipes.tests.data_generator import DataGenerator
 
 RECIPE_URL = reverse('recipes')
 
+API_CLIENT_JSON_FORMAT = 'json'
+
 
 def recipe_detail_url(recipe_id: int) -> str:
     return reverse('recipes',  args=[recipe_id])
@@ -50,7 +52,7 @@ class RecipeWithIngredientsAPITest(TestCase):
             ]
         }
 
-        response = self.client.post(RECIPE_URL, payload, format='json')
+        response = self.client.post(RECIPE_URL, payload, format=API_CLIENT_JSON_FORMAT)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -66,13 +68,13 @@ class RecipeWithIngredientsAPITest(TestCase):
         self.assertEqual(response_data_ingredients[1]['name'], payload['ingredients'][1]['name'])
 
     def test_update_recipe_name(self):
-        """Update recipe description for recipe with ingredients that is in db successful"""
+        """Update recipe description for recipe with ingredients is in db successful"""
         payload = {
             'description': 'New description'
         }
 
         url = recipe_detail_url(recipe_id=self.recipe.id)
-        response = self.client.patch(url, payload, format='json')
+        response = self.client.patch(url, payload, format=API_CLIENT_JSON_FORMAT)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -81,3 +83,27 @@ class RecipeWithIngredientsAPITest(TestCase):
         self.assertEqual(response_data_json['name'], self.recipe.name)
         self.assertEqual(response_data_json['description'], payload['description'])
         self.assertEqual(len(response_data_json['ingredients']), 2)
+        
+    def test_update_recipe_ingredient(self):
+        """Update recipe ingredient for recipe with ingredient in db successful"""
+        payload = {
+            'ingredients': [
+                {
+                    'name': 'New ingredient'
+                }
+            ]
+        }
+        
+        url = recipe_detail_url(recipe_id=self.recipe.id)
+        response = self.client.patch(url, payload, format=API_CLIENT_JSON_FORMAT)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response_data_json = json.loads(response.data)
+
+        self.assertEqual(response_data_json['name'], self.recipe.name)
+        self.assertEqual(response_data_json['description'], self.recipe.description)
+
+        responser_data_ingredients = response_data_json['ingredients']
+        self.assertEqual(len(responser_data_ingredients), 1)
+        self.assertEqual(responser_data_ingredients[0]['name'], payload['ingredients'][0]['name'])

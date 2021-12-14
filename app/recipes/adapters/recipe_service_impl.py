@@ -63,7 +63,7 @@ class RecipeServiceImpl(RecipeService):
 
             for ingredient in new_ingredients:
                 new_ingredient = Ingredient(
-                    name=ingredient.name
+                    name=ingredient['name']
                 )
                 self.ingredient_repository.create(ingredient=new_ingredient, recipe_id=recipe_id)
 

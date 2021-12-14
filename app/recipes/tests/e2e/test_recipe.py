@@ -10,6 +10,8 @@ from recipes.tests.data_generator import DataGenerator
 
 RECIPE_URL = reverse('recipes')
 
+API_CLIENT_JSON_FORMAT = 'json'
+
 
 def recipe_detail_url(recipe_id: int) -> str:
     return reverse('recipes',  args=[recipe_id])
@@ -41,7 +43,7 @@ class RecipeApiTests(TestCase):
             'description': 'Test description',
         }
 
-        response = self.client.post(RECIPE_URL, payload)
+        response = self.client.post(RECIPE_URL, payload, format=API_CLIENT_JSON_FORMAT)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -57,7 +59,7 @@ class RecipeApiTests(TestCase):
         }
 
         url = recipe_detail_url(recipe_id=self.recipe.id)
-        response = self.client.patch(url, payload)
+        response = self.client.patch(url, payload, format=API_CLIENT_JSON_FORMAT)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
