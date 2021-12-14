@@ -1,19 +1,19 @@
-import json
 from typing import List
 
-from recipes.adapters.ingredient_repository_impl import IngredientRepositoryImpl
-from recipes.domain.exceptions import RecipeNotFound, DataNotFound
-from recipes.domain.ingredient import Ingredient
-from recipes.domain.recipe import Recipe
-from recipes.ports.recipe_repository import RecipeRepository
-from recipes.ports.recipe_service import RecipeService
+from recipes.domain.exceptions.recipe_not_found import RecipeNotFound
+from recipes.domain.exceptions.data_not_found import DataNotFound
+from recipes.domain.interface.recipe_repository import RecipeRepository
+from recipes.domain.interface.recipe_service import RecipeService
+from recipes.adapters.repository.ingredient_repository_impl import IngredientRepositoryImpl
+from recipes.domain.entity.ingredient import Ingredient
+from recipes.domain.entity.recipe import Recipe
 
 
 class RecipeServiceImpl(RecipeService):
     """Implementation for recipe service"""
 
-    def __init__(self, repository: RecipeRepository, ingredient_repository: IngredientRepositoryImpl):
-        self.recipe_repository = repository
+    def __init__(self, recipe_repository: RecipeRepository, ingredient_repository: IngredientRepositoryImpl):
+        self.recipe_repository = recipe_repository
         self.ingredient_repository = ingredient_repository
 
     def get(self, recipe_id: int) -> Recipe:

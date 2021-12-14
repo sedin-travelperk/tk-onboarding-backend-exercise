@@ -1,8 +1,9 @@
 from typing import List
 
-from recipes.domain.ingredient import Ingredient
-from recipes.models import IngredientORM
-from recipes.ports.ingredients_repository import IngredientRepository
+from recipes.domain.entity.ingredient import Ingredient
+from recipes.domain.interface.ingredients_repository import IngredientRepository
+
+from recipes.adapters.repository.ingredient_orm import IngredientORM
 
 
 class IngredientRepositoryImpl(IngredientRepository):

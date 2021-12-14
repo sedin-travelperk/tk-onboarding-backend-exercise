@@ -3,7 +3,7 @@ from rest_framework.views import exception_handler
 from rest_framework.response import Response
 from rest_framework import status
 
-from recipes.domain.exceptions import RecipeNotFound
+from recipes.domain.exceptions.recipe_not_found import RecipeNotFound
 
 
 def custom_exception_handler(exception, context):

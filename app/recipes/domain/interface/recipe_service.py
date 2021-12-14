@@ -1,11 +1,11 @@
 import abc
 from typing import List
 
-from recipes.domain.recipe import Recipe
+from recipes.domain.entity.recipe import Recipe
 
 
-class RecipeRepository(abc.ABC):
-    """Abstraction for recipe persistence operations"""
+class RecipeService(abc.ABC):
+    """Abstraction for recipe service"""
 
     @abc.abstractmethod
     def get(self, recipe_id: int) -> Recipe:
@@ -16,11 +16,11 @@ class RecipeRepository(abc.ABC):
         raise NotImplemented
 
     @abc.abstractmethod
-    def create(self, recipe: Recipe) -> Recipe:
+    def create(self, data: dict) -> Recipe:
         raise NotImplemented
 
     @abc.abstractmethod
-    def update(self, recipe: Recipe) -> Recipe:
+    def update(self, recipe_id: int, data: dict) -> Recipe:
         raise NotImplemented
 
     @abc.abstractmethod

@@ -2,7 +2,8 @@ from typing import List
 
 from faker import Faker
 
-from recipes.models import RecipeORM, IngredientORM
+from recipes.adapters.repository.ingredient_orm import IngredientORM
+from recipes.adapters.repository.recipe_orm import RecipeORM
 
 fake = Faker()
 

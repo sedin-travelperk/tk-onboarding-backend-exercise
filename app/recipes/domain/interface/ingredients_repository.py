@@ -1,7 +1,7 @@
 import abc
 from typing import List
 
-from recipes.domain.ingredient import Ingredient
+from recipes.domain.entity.ingredient import Ingredient
 
 
 class IngredientRepository(abc.ABC):

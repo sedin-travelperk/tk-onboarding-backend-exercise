@@ -1,9 +1,10 @@
 from typing import List
 
-from recipes.domain.exceptions import DataNotFound
-from recipes.domain.recipe import Recipe
-from recipes.models import RecipeORM
-from recipes.ports.recipe_repository import RecipeRepository
+
+from recipes.domain.entity.recipe import Recipe
+from recipes.domain.exceptions.data_not_found import DataNotFound
+from recipes.domain.interface.recipe_repository import RecipeRepository
+from recipes.adapters.repository.recipe_orm import RecipeORM
 
 
 class RecipeRepositoryImpl(RecipeRepository):
