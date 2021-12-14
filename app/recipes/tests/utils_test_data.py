@@ -1,3 +1,5 @@
+from typing import List
+
 from faker import Faker
 
 from recipes.models import RecipeORM, IngredientORM
@@ -5,7 +7,7 @@ from recipes.models import RecipeORM, IngredientORM
 fake = Faker()
 
 
-class DataGenerator:
+class UtilsTestData:
     """Helper class to generate test data in db"""
 
     @staticmethod
@@ -24,12 +26,16 @@ class DataGenerator:
 
     @staticmethod
     def create_and_return_recipe_with_ingredients() -> RecipeORM:
-        recipe = DataGenerator.create_and_return_recipe()
+        recipe = UtilsTestData.create_and_return_recipe()
 
-        DataGenerator.add_ingredient_to_recipe(recipe=recipe)
-        DataGenerator.add_ingredient_to_recipe(recipe=recipe)
+        UtilsTestData.add_ingredient_to_recipe(recipe=recipe)
+        UtilsTestData.add_ingredient_to_recipe(recipe=recipe)
 
         recipe.save()
         recipe.refresh_from_db()
 
         return recipe
+
+    @staticmethod
+    def get_ingredients_from_db(recipe_id: int) -> List[IngredientORM]:
+        return IngredientORM.objects.filter(recipe_id=recipe_id)

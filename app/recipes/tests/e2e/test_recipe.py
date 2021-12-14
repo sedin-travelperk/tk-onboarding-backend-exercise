@@ -6,7 +6,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from recipes.tests.data_generator import DataGenerator
+from recipes.tests.utils_test_data import UtilsTestData
 
 RECIPE_URL = reverse('recipes')
 
@@ -22,7 +22,7 @@ class RecipeApiTests(TestCase):
 
     def setUp(self) -> None:
         self.client = APIClient()
-        self.recipe = DataGenerator.create_and_return_recipe()
+        self.recipe = UtilsTestData.create_and_return_recipe()
 
     def test_retrieve_recipe_list(self):
         """Retrieve recipe list from db successful"""

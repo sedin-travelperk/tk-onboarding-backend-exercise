@@ -6,7 +6,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from recipes.tests.data_generator import DataGenerator
+from recipes.tests.utils_test_data import UtilsTestData
 
 RECIPE_URL = reverse('recipes')
 
@@ -22,7 +22,7 @@ class RecipeWithIngredientsAPITest(TestCase):
 
     def setUp(self) -> None:
         self.client = APIClient()
-        self.recipe = DataGenerator.create_and_return_recipe_with_ingredients()
+        self.recipe = UtilsTestData.create_and_return_recipe_with_ingredients()
 
     def test_retrieve_recipe_list(self):
         """Retrieve recipe with ingredients list from db successful"""
@@ -107,3 +107,14 @@ class RecipeWithIngredientsAPITest(TestCase):
         responser_data_ingredients = response_data_json['ingredients']
         self.assertEqual(len(responser_data_ingredients), 1)
         self.assertEqual(responser_data_ingredients[0]['name'], payload['ingredients'][0]['name'])
+
+    def test_delete_recipe_with_ingredients(self):
+        """Deleting recipe with ingredients in db successful"""
+        url = recipe_detail_url(recipe_id=self.recipe.id)
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        ingredients_in_db = UtilsTestData.get_ingredients_from_db(recipe_id=self.recipe.id)
+
+        self.assertEqual(len(ingredients_in_db), 0)
