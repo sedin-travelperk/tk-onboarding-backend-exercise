@@ -12,25 +12,22 @@ class RecipesView(APIView):
     Return list of all recipes or create new one.
     """
 
-    def get(self, request, format=None):
-        service = RecipeServiceImpl(
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.recipe_service = RecipeServiceImpl(
             recipe_repository=RecipeRepositoryImpl(),
             ingredient_repository=IngredientRepositoryImpl()
         )
 
-        recipes = service.find_all()
+    def get(self, request, format=None):
+        recipes = self.recipe_service.find_all()
 
         result = [recipe.to_json() for recipe in recipes]
 
         return Response(result, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
-        service = RecipeServiceImpl(
-            recipe_repository=RecipeRepositoryImpl(),
-            ingredient_repository=IngredientRepositoryImpl()
-        )
-
-        result = service.create(request.data)
+        result = self.recipe_service.create(request.data)
 
         return Response(result.to_json(), status=status.HTTP_200_OK)
 

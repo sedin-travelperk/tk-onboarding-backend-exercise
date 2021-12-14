@@ -12,23 +12,20 @@ class RecipeDetailView(APIView):
     Retrieve, update or delete a recipe.
     """
 
-    def get(self, request, pk, format=None):
-        service = RecipeServiceImpl(
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.recipe_service = RecipeServiceImpl(
             recipe_repository=RecipeRepositoryImpl(),
             ingredient_repository=IngredientRepositoryImpl()
         )
 
-        result = service.get(recipe_id=pk)
+    def get(self, request, pk, format=None):
+        result = self.recipe_service.get(recipe_id=pk)
 
         return Response(result, status=status.HTTP_200_OK)
 
     def patch(self, request, pk, format=None):
-        service = RecipeServiceImpl(
-            recipe_repository=RecipeRepositoryImpl(),
-            ingredient_repository=IngredientRepositoryImpl()
-        )
-
-        result = service.update(
+        result = self.recipe_service.update(
             recipe_id=pk,
             data=request.data
         )
@@ -36,12 +33,7 @@ class RecipeDetailView(APIView):
         return Response(result.to_json(), status=status.HTTP_200_OK)
 
     def delete(self, request, pk, format=None):
-        service = RecipeServiceImpl(
-            recipe_repository=RecipeRepositoryImpl(),
-            ingredient_repository=IngredientRepositoryImpl()
-        )
-
-        service.delete(
+        self.recipe_service.delete(
             recipe_id=pk
         )
 
