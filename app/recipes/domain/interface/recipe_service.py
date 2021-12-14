@@ -20,7 +20,7 @@ class RecipeService(abc.ABC):
         raise NotImplemented
 
     @abc.abstractmethod
-    def create(self, data: dict) -> Recipe:
+    def create(self, recipe: Recipe) -> Recipe:
         raise NotImplemented
 
     @abc.abstractmethod

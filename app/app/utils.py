@@ -1,4 +1,3 @@
-import logging
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
 from rest_framework import status
@@ -14,8 +13,6 @@ def custom_exception_handler(exception, context):
             'error_msg': str(exception),
             'error_code': 'not_found'
         }
-
-        #logging.error(f"Original error detail and callstack: {exception}")
 
         return Response(
             data=error_data,

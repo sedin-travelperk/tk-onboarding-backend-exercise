@@ -17,13 +17,10 @@ class RecipeServiceImpl(RecipeService):
         self.ingredient_repository = ingredient_repository
 
     def get(self, recipe_id: int) -> Recipe:
-        try:
-            recipe = self.recipe_repository.get(recipe_id=recipe_id)
-            recipe.ingredients = self.ingredient_repository.find_by_recipe_id(recipe_id=recipe_id)
+        recipe = self.recipe_repository.get(recipe_id=recipe_id)
+        recipe.ingredients = self.ingredient_repository.find_by_recipe_id(recipe_id=recipe_id)
 
-            return recipe
-        except DataNotFound as e:
-            raise RecipeNotFound(f'Recipe with id -> {recipe_id} not found!')
+        return recipe
 
     def find_all(self) -> List[Recipe]:
         recipes = self.recipe_repository.find_all()
@@ -41,17 +38,12 @@ class RecipeServiceImpl(RecipeService):
 
         return recipes
 
-    def create(self, data: dict) -> Recipe:
-        recipe = Recipe(
-            name=data['name'],
-            description=data['description']
-        )
-
+    def create(self, recipe: Recipe) -> Recipe:
         new_recipe = self.recipe_repository.create(recipe=recipe)
 
-        for ingredient in data.get('ingredients', []):
+        for ingredient in recipe.ingredients:
             new_ingredient = Ingredient(
-                name=ingredient['name']
+                name=ingredient.name
             )
             new_recipe.ingredients.append(self.ingredient_repository.create(new_ingredient, new_recipe.recipe_id))
 
