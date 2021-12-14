@@ -1,6 +1,3 @@
-import json
-
-from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,7 +5,6 @@ from rest_framework import status
 from recipes.adapters.ingredient_repository_impl import IngredientRepositoryImpl
 from recipes.adapters.recipe_repository_impy import RecipeRepositoryImpl
 from recipes.adapters.recipe_service_impl import RecipeServiceImpl
-from recipes.domain.recipe import Recipe
 
 
 class RecipesView(APIView):

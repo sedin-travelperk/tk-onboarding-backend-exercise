@@ -23,7 +23,6 @@ class RecipeServiceImpl(RecipeService):
 
             return recipe
         except DataNotFound as e:
-            print(e)
             raise RecipeNotFound(f'Recipe with id -> {recipe_id} not found!')
 
     def find_all(self) -> List[Recipe]:
