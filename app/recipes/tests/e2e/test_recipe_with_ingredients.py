@@ -64,3 +64,20 @@ class RecipeWithIngredientsAPITest(TestCase):
         self.assertEqual(len(response_data_ingredients), len(payload['ingredients']))
         self.assertEqual(response_data_ingredients[0]['name'], payload['ingredients'][0]['name'])
         self.assertEqual(response_data_ingredients[1]['name'], payload['ingredients'][1]['name'])
+
+    def test_update_recipe_name(self):
+        """Update recipe description for recipe with ingredients that is in db successful"""
+        payload = {
+            'description': 'New description'
+        }
+
+        url = recipe_detail_url(recipe_id=self.recipe.id)
+        response = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response_data_json = json.loads(response.data)
+
+        self.assertEqual(response_data_json['name'], self.recipe.name)
+        self.assertEqual(response_data_json['description'], payload['description'])
+        self.assertEqual(len(response_data_json['ingredients']), 2)

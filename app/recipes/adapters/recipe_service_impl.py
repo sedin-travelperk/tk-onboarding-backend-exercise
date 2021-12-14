@@ -18,7 +18,10 @@ class RecipeServiceImpl(RecipeService):
 
     def get(self, recipe_id: int) -> Recipe:
         try:
-            return self.recipe_repository.get(recipe_id=recipe_id)
+            recipe = self.recipe_repository.get(recipe_id=recipe_id)
+            recipe.ingredients = self.ingredient_repository.find_by_recipe_id(recipe_id=recipe_id)
+
+            return recipe
         except DataNotFound as e:
             print(e)
             raise RecipeNotFound(f'Recipe with id -> {recipe_id} not found!')
@@ -51,6 +54,18 @@ class RecipeServiceImpl(RecipeService):
         recipe = self.get(recipe_id=recipe_id)
 
         recipe.update(**data)
+
+        new_ingredients = data.get('ingredients', None)
+
+        if new_ingredients is not None:
+            for ingredient in recipe.ingredients:
+                self.ingredient_repository.delete(ingredient_id=ingredient.ingredient_id)
+
+            for ingredient in new_ingredients:
+                new_ingredient = Ingredient(
+                    name=ingredient.name
+                )
+                self.ingredient_repository.create(ingredient=new_ingredient, recipe_id=recipe_id)
 
         self.recipe_repository.update(recipe=recipe)
 
