@@ -13,16 +13,6 @@ class Recipe:
         self.description = description
         self.ingredients = ingredients
 
-    def update(self, **kwargs):
-        name = kwargs.get('name', None)
-        description = kwargs.get('description', None)
-
-        if name:
-            self.name = name
-
-        if description:
-            self.description = description
-
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__)
 

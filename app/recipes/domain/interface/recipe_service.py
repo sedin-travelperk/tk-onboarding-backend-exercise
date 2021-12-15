@@ -24,9 +24,13 @@ class RecipeService(abc.ABC):
         raise NotImplemented
 
     @abc.abstractmethod
-    def update(self, recipe_id: int, data: dict) -> Recipe:
+    def update(self, recipe: Recipe) -> Recipe:
         raise NotImplemented
 
     @abc.abstractmethod
     def delete(self, recipe_id: int) -> None:
+        raise NotImplemented
+
+    @abc.abstractmethod
+    def exists(self, recipe_id: int) -> bool:
         raise NotImplemented

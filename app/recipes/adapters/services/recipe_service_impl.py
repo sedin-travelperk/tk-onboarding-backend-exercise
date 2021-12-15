@@ -1,7 +1,5 @@
 from typing import List
 
-from recipes.domain.exceptions.recipe_not_found import RecipeNotFound
-from recipes.domain.exceptions.data_not_found import DataNotFound
 from recipes.domain.interface.recipe_repository import RecipeRepository
 from recipes.domain.interface.recipe_service import RecipeService
 from recipes.adapters.repository.ingredient_repository_impl import IngredientRepositoryImpl
@@ -49,30 +47,21 @@ class RecipeServiceImpl(RecipeService):
 
         return new_recipe
 
-    def update(self, recipe_id: int, data: dict) -> Recipe:
-        recipe = self.get(recipe_id=recipe_id)
-
-        recipe.update(**data)
-
-        new_ingredients = data.get('ingredients', None)
-
-        if new_ingredients is not None:
-            for ingredient in recipe.ingredients:
-                self.ingredient_repository.delete(ingredient_id=ingredient.ingredient_id)
-
-            for ingredient in new_ingredients:
-                new_ingredient = Ingredient(
-                    name=ingredient['name']
-                )
-                self.ingredient_repository.create(ingredient=new_ingredient, recipe_id=recipe_id)
-
+    def update(self, recipe: Recipe) -> Recipe:
         self.recipe_repository.update(recipe=recipe)
 
-        return self.get(recipe_id=recipe_id)
+        if recipe.ingredients:
+            self.ingredient_repository.delete_by_recipe(recipe_id=recipe.recipe_id)
+
+            for ingredient in recipe.ingredients:
+                self.ingredient_repository.create(ingredient=ingredient, recipe_id=recipe.recipe_id)
+
+        return self.get(recipe_id=recipe.recipe_id)
 
     def delete(self, recipe_id: int) -> None:
-        self.get(recipe_id=recipe_id)
-
         self.recipe_repository.delete(recipe_id=recipe_id)
+
+    def exists(self, recipe_id: int) -> bool:
+        return self.recipe_repository.exists(recipe_id=recipe_id)
 
 

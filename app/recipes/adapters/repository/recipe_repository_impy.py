@@ -2,7 +2,7 @@ from typing import List
 
 
 from recipes.domain.entity.recipe import Recipe
-from recipes.domain.exceptions.data_not_found import DataNotFound
+from recipes.domain.exceptions.recipe_not_found import RecipeNotFound
 from recipes.domain.interface.recipe_repository import RecipeRepository
 from recipes.adapters.repository.recipe_orm import RecipeORM
 
@@ -11,12 +11,8 @@ class RecipeRepositoryImpl(RecipeRepository):
     """Implementation for Recipe repository"""
 
     def get(self, recipe_id: int) -> Recipe:
-        try:
-            recipe: RecipeORM = RecipeORM.objects.get(id=recipe_id)
-            return recipe.to_domain_model()
-
-        except RecipeORM.DoesNotExist as e:
-            raise DataNotFound(f'Item with id {recipe_id} not present in db.')
+        recipe: RecipeORM = RecipeORM.objects.get(id=recipe_id)
+        return recipe.to_domain_model()
 
     def find_all(self) -> List[Recipe]:
         recipes = RecipeORM.objects.all()
@@ -48,6 +44,10 @@ class RecipeRepositoryImpl(RecipeRepository):
 
     def delete(self, recipe_id: int) -> None:
         RecipeORM.objects.filter(id=recipe_id).delete()
+
+    def exists(self, recipe_id: int) -> bool:
+        return RecipeORM.objects.filter(id=recipe_id).exists()
+
 
 
 

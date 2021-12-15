@@ -30,3 +30,7 @@ class RecipeRepository(abc.ABC):
     @abc.abstractmethod
     def delete(self, recipe_id: int) -> None:
         raise NotImplemented
+
+    @abc.abstractmethod
+    def exists(self, recipe_id: int) -> bool:
+        raise NotImplemented

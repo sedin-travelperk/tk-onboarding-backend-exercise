@@ -23,5 +23,6 @@ class IngredientRepositoryImpl(IngredientRepository):
 
         return ingredient_orm.to_domain_model()
 
-    def delete(self, ingredient_id: int) -> None:
-        IngredientORM.objects.filter(id=ingredient_id).delete()
+    def delete_by_recipe(self, recipe_id: int) -> None:
+        IngredientORM.objects.filter(recipe_id=recipe_id).delete()
+
