@@ -9,10 +9,7 @@ class UpdateRecipe:
     def __init__(self, recipe_service: RecipeService):
         self.recipe_service = recipe_service
 
-    def execute(self, recipe_id: int, data: dict) -> Recipe:
-        if not self.recipe_service.exists(recipe_id=recipe_id):
-            raise RecipeNotFound(recipe_id=recipe_id)
-
+    def _update_recipe(self, recipe_id: int, data: dict) -> Recipe:
         name = data.get('name')
         description = data.get('description')
         new_ingredients = data.get('ingredients', None)
@@ -30,7 +27,17 @@ class UpdateRecipe:
         else:
             recipe.ingredients = []
 
+        return recipe
+
+    def execute(self, recipe_id: int, data: dict) -> Recipe:
+        if not self.recipe_service.exists(recipe_id=recipe_id):
+            raise RecipeNotFound(recipe_id=recipe_id)
+
+        recipe = self._update_recipe(recipe_id=recipe_id, data=data)
+
         return self.recipe_service.update(recipe=recipe)
+
+
 
 
 

@@ -37,18 +37,7 @@ class RecipesView(APIView):
         return Response(result, status=status.HTTP_200_OK)
 
     def post(self, request):
-        data = request.data
-
-        recipe = Recipe(
-            name=data['name'],
-            description=data['description']
-        )
-
-        for ingredient in data.get('ingredients', []):
-            new_ingredient = Ingredient(
-                name=ingredient['name']
-            )
-            recipe.ingredients.append(new_ingredient)
+        recipe = Recipe.create_from_dict(data=request.data)
 
         result = CreateRecipe(recipe_service=self.recipe_service).execute(recipe=recipe)
 
