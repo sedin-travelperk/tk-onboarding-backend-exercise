@@ -32,6 +32,7 @@ class Recipe:
 
     def to_json(self):
         return {
+            "id": self.recipe_id,
             "name": self.name,
             "description": self.description,
             "ingredients": [ingredient.to_json() for ingredient in self.ingredients]
