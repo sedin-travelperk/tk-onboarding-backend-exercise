@@ -25,5 +25,3 @@ class RecipeTestCase(TestCase):
     def get_recipe_detail_url(self, recipe_id: int) -> str:
         return reverse('recipes', args=[recipe_id])
 
-    def get_json(self, data):
-        return json.loads(data)

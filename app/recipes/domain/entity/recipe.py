@@ -31,7 +31,11 @@ class Recipe:
         return recipe
 
     def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
+        return {
+            "name": self.name,
+            "description": self.description,
+            "ingredients": [ingredient.to_json() for ingredient in self.ingredients]
+        }
 
     def __str__(self):
         return f"{self.name} - {self.description}"

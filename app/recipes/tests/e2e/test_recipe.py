@@ -27,12 +27,9 @@ class RecipeApiTests(RecipeTestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        response_data_json = self.get_json(response.data)
-
-        self.assertEqual(response_data_json['name'], self.recipe.name)
-        self.assertEqual(response_data_json['description'], self.recipe.description)
-        self.assertEqual(len(response_data_json['ingredients']), 0)
+        self.assertEqual(response.data['name'], self.recipe.name)
+        self.assertEqual(response.data['description'], self.recipe.description)
+        self.assertEqual(len(response.data['ingredients']), 0)
 
     def test_retrieve_recipe_not_created(self):
         """Retrieve recipe that is not present in db"""
@@ -55,11 +52,8 @@ class RecipeApiTests(RecipeTestCase):
             format=API_CLIENT_JSON_FORMAT)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        response_data_json = self.get_json(response.data)
-
-        self.assertEqual(response_data_json['name'], payload['name'])
-        self.assertEqual(response_data_json['description'], payload['description'])
+        self.assertEqual(response.data['name'], payload['name'])
+        self.assertEqual(response.data['description'], payload['description'])
 
     def test_update_recipe(self):
         """Updating recipe in db successful"""
@@ -73,11 +67,8 @@ class RecipeApiTests(RecipeTestCase):
             format=API_CLIENT_JSON_FORMAT)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        response_data_json = self.get_json(response.data)
-
-        self.assertEqual(response_data_json['name'], payload['name'])
-        self.assertEqual(response_data_json['description'], self.recipe.description)
+        self.assertEqual(response.data['name'], payload['name'])
+        self.assertEqual(response.data['description'], self.recipe.description)
 
     def test_update_recipe_not_created(self):
         """Try to update recipe that is not present in db"""
@@ -136,11 +127,8 @@ class RecipeApiTests(RecipeTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
-
-        response_data_json = self.get_json(response.data[0])
-
-        self.assertEqual(response_data_json['name'], self.recipe.name)
-        self.assertEqual(response_data_json['description'], self.recipe.description)
+        self.assertEqual(response.data[0]['name'], self.recipe.name)
+        self.assertEqual(response.data[0]['description'], self.recipe.description)
 
     def test_find_recipes_by_name_substring(self):
         """Retrieve all recipes from db with given name substring"""
