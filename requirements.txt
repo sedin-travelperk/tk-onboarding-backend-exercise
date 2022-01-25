@@ -1,0 +1,5 @@
+Django
+djangorestframework
+Faker
+django-cors-headers
+
